@@ -1,0 +1,2066 @@
+
+ <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+   <title>Hybrilink Pharma - Administration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<!-- PWA Meta Tags -->
+  <meta name="application-name" content="TheoVêt">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TheoVêt">
+  <meta name="description" content="Solution complète de gestion de commerce de vêtements">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="msapplication-TileColor" content="#3498db">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="theme-color" content="#3498db">
+
+   <!-- Service Worker et mise à jour -->
+
+
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="icon-167x167.png">
+
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+    <!-- Bootstrap 5 + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #0d6efd;
+            --primary-light: #e6f2ff;
+            --primary-dark: #0b5ed7;
+            --success: #198754;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-700: #334155;
+            --gray-900: #0f172a;
+        }
+
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        /* Login Page - Style identique à pd.html */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            min-height: 600px;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .login-left {
+            flex: 1;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+
+        .login-left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 40px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .login-header {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .login-header .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0 20px 0;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .login-header h2 {
+            color: var(--gray-900);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .login-header p {
+            color: var(--gray-700);
+            margin: 0;
+        }
+
+        /* Dashboard */
+        .dashboard-container {
+            display: none;
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary) !important;
+            font-size: 1.5rem;
+        }
+
+        .user-info {
+            background: var(--gray-50);
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 1px solid var(--gray-200);
+        }
+
+        /* Menu Button */
+        .menu-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Sidebar */
+        .sidebar-menu {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border: 1px solid var(--gray-200);
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            width: 280px;
+            height: calc(100vh - 100px);
+            z-index: 1000;
+            transform: translateX(-320px);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu.show {
+            transform: translateX(0);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--gray-700);
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-align: left;
+            width: 100%;
+        }
+
+        .nav-pills .nav-link:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-pills .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-pills .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            color: var(--gray-900);
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Payment Alert */
+        .payment-alert {
+            background: linear-gradient(135deg, #fff3cd, #ffecb5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid #ffc107;
+        }
+
+        .countdown-timer {
+            background: var(--danger);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .timer-warning {
+            background: var(--warning);
+            color: var(--gray-900);
+        }
+
+        .timer-danger {
+            background: var(--danger);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: var(--gray-50);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(13,110,253,0.1);
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Vendeur Cards */
+        .vendeur-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .vendeur-card:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .vendeur-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Stock Cards */
+        .stock-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s;
+        }
+
+        .stock-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+
+        .stock-quantity {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stock-expiry {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .expiry-warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .expiry-danger {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        /* Cart */
+        .cart-item {
+            background: var(--gray-50);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .cart-total {
+            background: var(--primary-light);
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* Forms */
+        .form-control, .form-select {
+            border: 1.5px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.1);
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(13,110,253,0.3);
+        }
+
+        .btn-outline-custom {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger-custom {
+            background: linear-gradient(135deg, #dc3545, #bb2d3b);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-danger-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220,53,69,0.3);
+        }
+
+        /* Tables */
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .table-custom tbody tr {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border-radius: 10px;
+        }
+
+        .table-custom td {
+            padding: 15px;
+            border: none;
+        }
+
+        .table-custom td:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .table-custom td:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-card {
+                flex-direction: column;
+                min-height: auto;
+                border-radius: 20px;
+            }
+            
+            .login-left img {
+                height: 200px;
+            }
+            
+            .login-right {
+                padding: 30px;
+            }
+            
+            .content-card {
+                padding: 20px;
+            }
+            
+            .sidebar-menu {
+                width: 250px;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-700);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-200);
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page - Nouveau design avec image -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <div class="login-left">
+                <img src="hb.png" alt="Hybrilink Pharma">
+            </div>
+            <div class="login-right">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="bi bi-capsule"></i>
+                    </div>
+                    <h2>Hybrilink Pharma</h2>
+                    <p class="text-muted">Espace Administrateur</p>
+                </div>
+                
+                <form id="loginForm" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control border-start-0" id="loginEmail" placeholder="admin@pharmacie.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Mot de passe</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" class="form-control border-start-0" id="loginPassword" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-custom w-100">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container" id="dashboard">
+        <!-- Navbar -->
+        <nav class="navbar navbar-custom">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center">
+                    <button class="menu-toggle me-3" id="menuToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <i class="bi bi-capsule me-2"></i>Hybrilink Pharma
+                    </a>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-info">
+                        <i class="bi bi-building me-2 text-primary"></i>
+                        <span id="pharmacyNameDisplay">Pharmacie</span>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm" onclick="logout()">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar Menu -->
+        <div class="sidebar-menu" id="sidebarMenu">
+            <div class="text-center mb-4">
+                <div class="bg-primary-light rounded-circle p-3 d-inline-block mb-3">
+                    <i class="bi bi-person-circle text-primary fs-1"></i>
+                </div>
+                <h6 id="adminNameDisplay">Administrateur</h6>
+                <small class="text-muted" id="adminEmailDisplay">email@example.com</small>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="nav flex-column nav-pills" role="tablist">
+                <button class="nav-link active" id="dashboard-tab" data-bs-toggle="pill" data-bs-target="#dashboardContent" type="button" role="tab">
+                    <i class="bi bi-speedometer2"></i>
+                    Tableau de bord
+                </button>
+                <button class="nav-link" id="vendeurs-tab" data-bs-toggle="pill" data-bs-target="#vendeursContent" type="button" role="tab">
+                    <i class="bi bi-people"></i>
+                    Gestion des vendeurs
+                    <span class="badge bg-primary ms-2" id="vendeursCountSidebar">0</span>
+                </button>
+                <button class="nav-link" id="stock-tab" data-bs-toggle="pill" data-bs-target="#stockContent" type="button" role="tab">
+                    <i class="bi bi-box"></i>
+                    Ajout Stock
+                </button>
+                <button class="nav-link" id="stockStats-tab" data-bs-toggle="pill" data-bs-target="#stockStatsContent" type="button" role="tab">
+                    <i class="bi bi-graph-up"></i>
+                    Statistiques Stock
+                </button>
+                <button class="nav-link" id="commande-tab" data-bs-toggle="pill" data-bs-target="#commandeContent" type="button" role="tab">
+                    <i class="bi bi-truck"></i>
+                    Commande Fournisseur
+                </button>
+                <button class="nav-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profileContent" type="button" role="tab">
+                    <i class="bi bi-gear"></i>
+                    Paramètres
+                </button>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="small text-muted">
+                <i class="bi bi-arrow-repeat me-1"></i>
+                Dernière synchro: <span id="lastSync">jamais</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container-fluid px-4 py-4" style="margin-left: 0; transition: margin-left 0.3s;">
+            <!-- Payment Alert -->
+            <div class="payment-alert" id="paymentAlert" style="display: none;">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="mb-2">
+                            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                            Statut de l'abonnement
+                        </h5>
+                        <p class="mb-md-0" id="paymentStatus">Votre abonnement expire bientôt</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <span class="countdown-timer" id="countdown"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-pane fade show active" id="dashboardContent" role="tabpanel">
+                    <div class="content-card">
+                        <h4 class="card-title">
+                            <i class="bi bi-building text-primary"></i>
+                            Informations de la pharmacie
+                        </h4>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <div class="info-icon">
+                                        <i class="bi bi-shop"></i>
+                                    </div>
+                                    <h6 class="text-muted mb-2">Nom de la pharmacie</h6>
+                                    <h5 id="infoPharmacyName">-</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <div class="info-icon">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </div>
+                                    <h6 class="text-muted mb-2">Adresse</h6>
+                                    <h5 id="infoAddress">-</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <div class="info-icon">
+                                        <i class="bi bi-telephone"></i>
+                                    </div>
+                                    <h6 class="text-muted mb-2">Téléphone</h6>
+                                    <h5 id="infoPhone">-</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-card">
+                                    <div class="info-icon">
+                                        <i class="bi bi-envelope"></i>
+                                    </div>
+                                    <h6 class="text-muted mb-2">Email</h6>
+                                    <h5 id="infoEmail">-</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h4 class="card-title">
+                            <i class="bi bi-calendar-check text-primary"></i>
+                            Abonnement
+                        </h4>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <small class="text-muted">Date de début</small>
+                                    <h5 id="infoStartDate">-</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <small class="text-muted">Date de fin</small>
+                                    <h5 id="infoEndDate">-</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <small class="text-muted">Jours restants</small>
+                                    <h5 id="infoDaysLeft" class="fw-bold text-primary">-</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h4 class="card-title">
+                            <i class="bi bi-graph-up text-primary"></i>
+                            Statistiques
+                        </h4>
+                        
+                        <div class="row g-4">
+                            <div class="col-sm-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary-light rounded-3 p-3 me-3">
+                                        <i class="bi bi-people text-primary fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Vendeurs actifs</h6>
+                                        <h3 class="mb-0" id="statsVendeurs">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success-light rounded-3 p-3 me-3" style="background: #d1e7dd;">
+                                        <i class="bi bi-box text-success fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Médicaments</h6>
+                                        <h3 class="mb-0" id="statsMedicaments">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning-light rounded-3 p-3 me-3" style="background: #fff3cd;">
+                                        <i class="bi bi-exclamation-triangle text-warning fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-muted mb-1">Stock faible</h6>
+                                        <h3 class="mb-0" id="statsStockFaible">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendeurs Tab -->
+                <div class="tab-pane fade" id="vendeursContent" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="content-card">
+                                <h4 class="card-title">
+                                    <i class="bi bi-person-plus text-primary"></i>
+                                    Nouveau vendeur
+                                </h4>
+                                
+                                <form id="createVendeurForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nom complet</label>
+                                        <input type="text" class="form-control" id="vendeurName" placeholder="Jean Dupont" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="vendeurEmail" placeholder="vendeur@pharmacie.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Mot de passe</label>
+                                        <input type="password" class="form-control" id="vendeurPassword" placeholder="••••••••" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Téléphone</label>
+                                        <input type="tel" class="form-control" id="vendeurPhone" placeholder="+221 77 123 45 67" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary-custom w-100">
+                                        <i class="bi bi-save me-2"></i>Créer le vendeur
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-7">
+                            <div class="content-card">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h4 class="card-title mb-0">
+                                        <i class="bi bi-people text-primary"></i>
+                                        Liste des vendeurs
+                                    </h4>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-primary me-2" onclick="refreshVendeurs()">
+                                            <i class="bi bi-arrow-repeat"></i>
+                                        </button>
+                                        <span class="badge bg-primary" id="vendeursCount">0</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="searchVendeur" placeholder="Rechercher un vendeur...">
+                                    </div>
+                                </div>
+                                
+                                <div id="vendeursList" style="max-height: 500px; overflow-y: auto;">
+                                    <!-- Vendeurs will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Tab -->
+                <div class="tab-pane fade" id="stockContent" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <h4 class="card-title">
+                                    <i class="bi bi-box-seam text-primary"></i>
+                                    Ajouter un médicament
+                                </h4>
+                                
+                                <form id="addStockForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nom du médicament</label>
+                                        <input type="text" class="form-control" id="medicamentNom" placeholder="Paracétamol" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" id="medicamentDescription" rows="2" placeholder="Description du médicament"></textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Quantité</label>
+                                            <input type="number" class="form-control" id="medicamentQuantite" min="0" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Prix unitaire (FCFA)</label>
+                                            <input type="number" class="form-control" id="medicamentPrix" min="0" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Date d'expiration</label>
+                                            <input type="date" class="form-control" id="medicamentExpiration" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Fournisseur</label>
+                                            <input type="text" class="form-control" id="medicamentFournisseur" placeholder="Nom du fournisseur">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Code-barres / Référence</label>
+                                        <input type="text" class="form-control" id="medicamentCode" placeholder="Référence unique">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary-custom w-100">
+                                        <i class="bi bi-plus-circle me-2"></i>Ajouter au stock
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <h4 class="card-title">
+                                    <i class="bi bi-exclamation-triangle text-primary"></i>
+                                    Alertes stock
+                                </h4>
+                                
+                                <div id="stockAlertes">
+                                    <!-- Stock alertes will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Stats Tab -->
+                <div class="tab-pane fade" id="stockStatsContent" role="tabpanel">
+                    <div class="content-card">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="card-title mb-0">
+                                <i class="bi bi-boxes text-primary"></i>
+                                Inventaire des médicaments
+                            </h4>
+                            <div>
+                                <button class="btn btn-outline-primary me-2" onclick="exportStockCSV()">
+                                    <i class="bi bi-file-earmark-spreadsheet"></i> Exporter CSV
+                                </button>
+                                <button class="btn btn-outline-success" onclick="exportStockPDF()">
+                                    <i class="bi bi-file-earmark-pdf"></i> Exporter PDF
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="searchStock" placeholder="Rechercher un médicament...">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="filterStock">
+                                        <option value="all">Tous les stocks</option>
+                                        <option value="low">Stock faible (< 10)</option>
+                                        <option value="expiring">Expiration proche</option>
+                                        <option value="expired">Expiré</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Médicament</th>
+                                        <th>Quantité</th>
+                                        <th>Prix</th>
+                                        <th>Expiration</th>
+                                        <th>Fournisseur</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stockList">
+                                    <!-- Stock items will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commande Tab -->
+                <div class="tab-pane fade" id="commandeContent" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="content-card">
+                                <h4 class="card-title">
+                                    <i class="bi bi-truck text-primary"></i>
+                                    Nouvelle commande fournisseur
+                                </h4>
+                                
+                                <form id="commandeForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Fournisseur</label>
+                                        <select class="form-select" id="commandeFournisseur" required>
+                                            <option value="">Sélectionner un fournisseur</option>
+                                            <option value="PharmaLab">PharmaLab</option>
+                                            <option value="MediDist">MediDist</option>
+                                            <option value="HealthSupply">HealthSupply</option>
+                                            <option value="Autre">Autre</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Médicament</label>
+                                        <select class="form-select" id="commandeMedicament">
+                                            <option value="">Sélectionner un médicament</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Quantité</label>
+                                            <input type="number" class="form-control" id="commandeQuantite" min="1" value="1">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Prix unitaire</label>
+                                            <input type="number" class="form-control" id="commandePrix" min="0">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary w-100 mb-3" onclick="ajouterAuPanier()">
+                                        <i class="bi bi-cart-plus me-2"></i>Ajouter au panier
+                                    </button>
+                                </form>
+                                
+                                <div class="mt-4">
+                                    <h6>Panier de commande</h6>
+                                    <div id="panierItems" style="max-height: 200px; overflow-y: auto;">
+                                        <!-- Panier items will be added here -->
+                                    </div>
+                                    <div class="cart-total mt-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Total:</span>
+                                            <span id="panierTotal">0 FCFA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <button class="btn btn-primary-custom w-100 mb-2" onclick="validerCommande()">
+                                        <i class="bi bi-check-circle me-2"></i>Valider la commande
+                                    </button>
+                                    <button class="btn btn-outline-secondary w-100" onclick="exporterCommande()">
+                                        <i class="bi bi-download me-2"></i>Exporter la commande
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-7">
+                            <div class="content-card">
+                                <h4 class="card-title">
+                                    <i class="bi bi-clock-history text-primary"></i>
+                                    Historique des commandes
+                                </h4>
+                                
+                                <div id="commandesList" style="max-height: 500px; overflow-y: auto;">
+                                    <!-- Commandes history will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tab -->
+                <div class="tab-pane fade" id="profileContent" role="tabpanel">
+                    <div class="content-card">
+                        <h4 class="card-title">
+                            <i class="bi bi-shield-lock text-primary"></i>
+                            Sécurité
+                        </h4>
+                        
+                        <form id="changePasswordForm">
+                            <div class="mb-3">
+                                <label class="form-label">Ancien mot de passe</label>
+                                <input type="password" class="form-control" id="oldPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nouveau mot de passe</label>
+                                <input type="password" class="form-control" id="newPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirmer le mot de passe</label>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary-custom">
+                                <i class="bi bi-check-circle me-2"></i>Changer le mot de passe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Edit Stock Modal -->
+    <div class="modal fade" id="editStockModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier le médicament</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editStockForm">
+                        <input type="hidden" id="editStockId">
+                        <div class="mb-3">
+                            <label class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="editNom" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantité</label>
+                            <input type="number" class="form-control" id="editQuantite" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Prix</label>
+                            <input type="number" class="form-control" id="editPrix" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date d'expiration</label>
+                            <input type="date" class="form-control" id="editExpiration" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="updateMedicament()">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXoNwKYj9GNgTSZr5wTWqIna6Cou33a98",
+            authDomain: "theovet-8323d.firebaseapp.com",
+            projectId: "theovet-8323d",
+            storageBucket: "theovet-8323d.firebasestorage.app",
+            messagingSenderId: "1007742031625",
+            appId: "1:1007742031625:web:3749c2ab333e7772c1a5d8"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Variables globales
+        let currentUser = null;
+        let currentPharmacy = null;
+        let currentPharmacyId = null;
+        let vendeursCache = [];
+        let stockCache = [];
+        let commandesCache = [];
+        let panier = [];
+        let editModal = null;
+
+        // Menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('sidebarMenu').classList.toggle('show');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        });
+
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebarMenu').classList.remove('show');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Connexion...';
+            submitBtn.disabled = true;
+
+            try {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                currentUser = userCredential.user;
+
+                // Récupérer la pharmacie
+                const pharmaciesSnapshot = await db.collection('pharmacies').get();
+                let foundPharmacy = null;
+                
+                pharmaciesSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.adminId === currentUser.uid) {
+                        foundPharmacy = {
+                            id: doc.id,
+                            ...data
+                        };
+                    }
+                });
+
+                if (!foundPharmacy) {
+                    throw new Error('Accès non autorisé');
+                }
+
+                currentPharmacy = foundPharmacy;
+                currentPharmacyId = foundPharmacy.id;
+
+                // Vérifier si le compte est expiré
+                const today = new Date();
+                const endDate = new Date(currentPharmacy.endDate);
+                
+                if (today > endDate) {
+                    await auth.signOut();
+                    throw new Error('Votre abonnement a expiré. Veuillez contacter l\'administration.');
+                }
+
+                // Afficher le dashboard
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+
+                // Mettre à jour l'affichage
+                updateDashboard();
+                
+                // Charger les données
+                await loadVendeurs();
+                await loadStock();
+                await loadCommandes();
+                
+                // Initialiser le modal
+                editModal = new bootstrap.Modal(document.getElementById('editStockModal'));
+
+            } catch (error) {
+                alert('Erreur: ' + error.message);
+                await auth.signOut();
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Déconnexion
+        function logout() {
+            auth.signOut();
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            panier = [];
+        }
+
+        // Charger les vendeurs
+        async function loadVendeurs() {
+            if (!currentPharmacyId) return;
+
+            try {
+                const snapshot = await db.collection('vendeurs')
+                    .where('pharmacyId', '==', currentPharmacyId)
+                    .get();
+
+                vendeursCache = [];
+                snapshot.forEach(doc => {
+                    vendeursCache.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                displayVendeurs(vendeursCache);
+                updateStats();
+            } catch (error) {
+                console.error('Erreur chargement vendeurs:', error);
+            }
+        }
+
+        // Afficher les vendeurs
+        function displayVendeurs(vendeurs) {
+            const vendeursList = document.getElementById('vendeursList');
+            const searchTerm = document.getElementById('searchVendeur')?.value.toLowerCase() || '';
+            
+            vendeursList.innerHTML = '';
+            let filteredCount = 0;
+
+            if (vendeurs.length === 0) {
+                vendeursList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-people"></i>
+                        <p>Aucun vendeur trouvé</p>
+                        <small class="text-muted">Commencez par créer un vendeur</small>
+                    </div>
+                `;
+                document.getElementById('vendeursCount').textContent = '0';
+                document.getElementById('vendeursCountSidebar').textContent = '0';
+                return;
+            }
+
+            vendeurs.forEach(vendeur => {
+                if (searchTerm && !vendeur.name?.toLowerCase().includes(searchTerm) && 
+                    !vendeur.email?.toLowerCase().includes(searchTerm)) {
+                    return;
+                }
+
+                filteredCount++;
+                
+                const initials = vendeur.name ? vendeur.name.split(' ').map(n => n[0]).join('').toUpperCase() : '??';
+                const createdAt = vendeur.createdAt ? new Date(vendeur.createdAt.toDate()).toLocaleDateString('fr-FR') : 'N/A';
+                
+                const card = document.createElement('div');
+                card.className = 'vendeur-card';
+                card.innerHTML = `
+                    <div class="d-flex">
+                        <div class="vendeur-avatar me-3">
+                            ${initials}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">${vendeur.name || 'Nom inconnu'}</h6>
+                                    <p class="mb-1 small"><i class="bi bi-envelope me-2"></i>${vendeur.email || 'Non renseigné'}</p>
+                                    <p class="mb-0 small"><i class="bi bi-telephone me-2"></i>${vendeur.phone || 'Non renseigné'}</p>
+                                </div>
+                                <span class="badge bg-success">Actif</span>
+                            </div>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>
+                                Créé le ${createdAt}
+                            </small>
+                        </div>
+                    </div>
+                `;
+                vendeursList.appendChild(card);
+            });
+
+            if (filteredCount === 0 && searchTerm) {
+                vendeursList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-search"></i>
+                        <p>Aucun résultat pour "${searchTerm}"</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('vendeursCount').textContent = filteredCount;
+            document.getElementById('vendeursCountSidebar').textContent = filteredCount;
+        }
+
+        // Rafraîchir les vendeurs
+        function refreshVendeurs() {
+            loadVendeurs();
+        }
+
+        // Créer un vendeur
+        document.getElementById('createVendeurForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Création...';
+            submitBtn.disabled = true;
+
+            try {
+                const email = document.getElementById('vendeurEmail').value;
+                const password = document.getElementById('vendeurPassword').value;
+
+                // Créer l'utilisateur
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Préparer les données du vendeur
+                const vendeurData = {
+                    adminId: currentUser.uid,
+                    pharmacyId: currentPharmacyId,
+                    pharmacyName: currentPharmacy.pharmacyName,
+                    vendeurId: user.uid,
+                    name: document.getElementById('vendeurName').value,
+                    email: email,
+                    phone: document.getElementById('vendeurPhone').value,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'actif'
+                };
+
+                // Ajouter à Firestore
+                await db.collection('vendeurs').add(vendeurData);
+
+                alert('Vendeur créé avec succès!');
+                e.target.reset();
+                await loadVendeurs();
+                
+            } catch (error) {
+                alert('Erreur: ' + error.message);
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Rechercher des vendeurs
+        document.getElementById('searchVendeur')?.addEventListener('input', () => {
+            displayVendeurs(vendeursCache);
+        });
+
+        // Charger le stock
+        async function loadStock() {
+            if (!currentPharmacyId) return;
+
+            try {
+                const snapshot = await db.collection('stock')
+                    .where('pharmacyId', '==', currentPharmacyId)
+                    .get();
+
+                stockCache = [];
+                snapshot.forEach(doc => {
+                    stockCache.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                displayStock(stockCache);
+                displayStockAlertes();
+                updateStats();
+                updateMedicamentSelect();
+            } catch (error) {
+                console.error('Erreur chargement stock:', error);
+            }
+        }
+
+        // Afficher le stock
+        function displayStock(stock) {
+            const stockList = document.getElementById('stockList');
+            const searchTerm = document.getElementById('searchStock')?.value.toLowerCase() || '';
+            const filter = document.getElementById('filterStock')?.value || 'all';
+            
+            stockList.innerHTML = '';
+
+            if (stock.length === 0) {
+                stockList.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <div class="empty-state">
+                                <i class="bi bi-box"></i>
+                                <p>Aucun médicament en stock</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let filteredStock = stock.filter(item => {
+                if (searchTerm && !item.nom?.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+
+                const today = new Date();
+                const expiryDate = item.expiration ? new Date(item.expiration) : null;
+                const daysToExpiry = expiryDate ? Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24)) : 999;
+
+                switch(filter) {
+                    case 'low':
+                        return item.quantite < 10;
+                    case 'expiring':
+                        return daysToExpiry <= 30 && daysToExpiry > 0;
+                    case 'expired':
+                        return daysToExpiry <= 0;
+                    default:
+                        return true;
+                }
+            });
+
+            filteredStock.forEach(item => {
+                const expiryDate = item.expiration ? new Date(item.expiration).toLocaleDateString('fr-FR') : 'N/A';
+                const today = new Date();
+                const expiryDateObj = item.expiration ? new Date(item.expiration) : null;
+                const daysToExpiry = expiryDateObj ? Math.ceil((expiryDateObj - today) / (1000 * 60 * 60 * 24)) : 999;
+                
+                let expiryClass = '';
+                if (daysToExpiry <= 0) expiryClass = 'expiry-danger';
+                else if (daysToExpiry <= 30) expiryClass = 'expiry-warning';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <strong>${item.nom || 'Sans nom'}</strong><br>
+                        <small class="text-muted">${item.code || 'Sans réf'}</small>
+                    </td>
+                    <td>
+                        <span class="stock-quantity">${item.quantite || 0}</span>
+                        ${item.quantite < 10 ? '<br><small class="text-danger">Stock faible</small>' : ''}
+                    </td>
+                    <td>${item.prix ? item.prix.toLocaleString() + ' FCFA' : '-'}</td>
+                    <td class="${expiryClass}">${expiryDate}</td>
+                    <td>${item.fournisseur || '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="editMedicament('${item.id}')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteMedicament('${item.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                stockList.appendChild(row);
+            });
+
+            if (filteredStock.length === 0) {
+                stockList.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <div class="empty-state">
+                                <i class="bi bi-box"></i>
+                                <p>Aucun résultat trouvé</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Afficher les alertes stock
+        function displayStockAlertes() {
+            const alertesDiv = document.getElementById('stockAlertes');
+            const today = new Date();
+            
+            const stockFaible = stockCache.filter(item => item.quantite < 10);
+            const stockExpiration = stockCache.filter(item => {
+                if (!item.expiration) return false;
+                const expiryDate = new Date(item.expiration);
+                const daysToExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                return daysToExpiry <= 30 && daysToExpiry > 0;
+            });
+            const stockExpire = stockCache.filter(item => {
+                if (!item.expiration) return false;
+                const expiryDate = new Date(item.expiration);
+                return expiryDate < today;
+            });
+
+            alertesDiv.innerHTML = '';
+
+            if (stockFaible.length > 0) {
+                alertesDiv.innerHTML += `
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>${stockFaible.length}</strong> médicament(s) en stock faible
+                    </div>
+                `;
+            }
+
+            if (stockExpiration.length > 0) {
+                alertesDiv.innerHTML += `
+                    <div class="alert alert-info">
+                        <i class="bi bi-clock me-2"></i>
+                        <strong>${stockExpiration.length}</strong> médicament(s) proches de l'expiration
+                    </div>
+                `;
+            }
+
+            if (stockExpire.length > 0) {
+                alertesDiv.innerHTML += `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-calendar-x me-2"></i>
+                        <strong>${stockExpire.length}</strong> médicament(s) expiré(s)
+                    </div>
+                `;
+            }
+
+            if (stockFaible.length === 0 && stockExpiration.length === 0 && stockExpire.length === 0) {
+                alertesDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle me-2"></i>
+                        Aucune alerte stock
+                    </div>
+                `;
+            }
+        }
+
+        // Ajouter au stock
+        document.getElementById('addStockForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Ajout...';
+            submitBtn.disabled = true;
+
+            try {
+                const stockData = {
+                    pharmacyId: currentPharmacyId,
+                    nom: document.getElementById('medicamentNom').value,
+                    description: document.getElementById('medicamentDescription').value,
+                    quantite: parseInt(document.getElementById('medicamentQuantite').value),
+                    prix: parseFloat(document.getElementById('medicamentPrix').value),
+                    expiration: document.getElementById('medicamentExpiration').value,
+                    fournisseur: document.getElementById('medicamentFournisseur').value,
+                    code: document.getElementById('medicamentCode').value,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdBy: currentUser.uid
+                };
+
+                await db.collection('stock').add(stockData);
+
+                alert('Médicament ajouté au stock avec succès!');
+                e.target.reset();
+                await loadStock();
+                
+            } catch (error) {
+                alert('Erreur: ' + error.message);
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Modifier un médicament
+        function editMedicament(id) {
+            const medicament = stockCache.find(item => item.id === id);
+            if (medicament) {
+                document.getElementById('editStockId').value = medicament.id;
+                document.getElementById('editNom').value = medicament.nom || '';
+                document.getElementById('editQuantite').value = medicament.quantite || 0;
+                document.getElementById('editPrix').value = medicament.prix || 0;
+                document.getElementById('editExpiration').value = medicament.expiration || '';
+                editModal.show();
+            }
+        }
+
+        // Mettre à jour un médicament
+        async function updateMedicament() {
+            const id = document.getElementById('editStockId').value;
+            
+            try {
+                await db.collection('stock').doc(id).update({
+                    nom: document.getElementById('editNom').value,
+                    quantite: parseInt(document.getElementById('editQuantite').value),
+                    prix: parseFloat(document.getElementById('editPrix').value),
+                    expiration: document.getElementById('editExpiration').value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert('Médicament mis à jour avec succès!');
+                editModal.hide();
+                await loadStock();
+                
+            } catch (error) {
+                alert('Erreur: ' + error.message);
+            }
+        }
+
+        // Supprimer un médicament
+        async function deleteMedicament(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce médicament ?')) {
+                try {
+                    await db.collection('stock').doc(id).delete();
+                    alert('Médicament supprimé avec succès!');
+                    await loadStock();
+                } catch (error) {
+                    alert('Erreur: ' + error.message);
+                }
+            }
+        }
+
+        // Rechercher dans le stock
+        document.getElementById('searchStock')?.addEventListener('input', () => {
+            displayStock(stockCache);
+        });
+
+        // Filtrer le stock
+        document.getElementById('filterStock')?.addEventListener('change', () => {
+            displayStock(stockCache);
+        });
+
+        // Mettre à jour le select des médicaments pour les commandes
+        function updateMedicamentSelect() {
+            const select = document.getElementById('commandeMedicament');
+            select.innerHTML = '<option value="">Sélectionner un médicament</option>';
+            
+            stockCache.forEach(item => {
+                if (item.nom) {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = `${item.nom} - ${item.prix ? item.prix.toLocaleString() + ' FCFA' : 'Prix non défini'}`;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        // Ajouter au panier de commande
+        function ajouterAuPanier() {
+            const medicamentId = document.getElementById('commandeMedicament').value;
+            const quantite = parseInt(document.getElementById('commandeQuantite').value);
+            const prix = parseFloat(document.getElementById('commandePrix').value);
+
+            if (!medicamentId) {
+                alert('Veuillez sélectionner un médicament');
+                return;
+            }
+
+            if (quantite < 1) {
+                alert('Quantité invalide');
+                return;
+            }
+
+            const medicament = stockCache.find(item => item.id === medicamentId);
+            
+            panier.push({
+                medicamentId: medicamentId,
+                nom: medicament.nom,
+                quantite: quantite,
+                prixUnitaire: prix || medicament.prix || 0
+            });
+
+            afficherPanier();
+            document.getElementById('commandeQuantite').value = '1';
+            document.getElementById('commandePrix').value = '';
+        }
+
+        // Afficher le panier
+        function afficherPanier() {
+            const panierDiv = document.getElementById('panierItems');
+            let total = 0;
+
+            panierDiv.innerHTML = '';
+
+            if (panier.length === 0) {
+                panierDiv.innerHTML = '<p class="text-muted text-center">Panier vide</p>';
+                document.getElementById('panierTotal').textContent = '0 FCFA';
+                return;
+            }
+
+            panier.forEach((item, index) => {
+                const itemTotal = item.quantite * item.prixUnitaire;
+                total += itemTotal;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${item.nom}</strong><br>
+                            <small>${item.quantite} x ${item.prixUnitaire.toLocaleString()} FCFA</small>
+                        </div>
+                        <div>
+                            <span class="fw-bold">${itemTotal.toLocaleString()} FCFA</span>
+                            <button class="btn btn-sm btn-danger ms-2" onclick="retirerDuPanier(${index})">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                panierDiv.appendChild(itemDiv);
+            });
+
+            document.getElementById('panierTotal').textContent = total.toLocaleString() + ' FCFA';
+        }
+
+        // Retirer du panier
+        function retirerDuPanier(index) {
+            panier.splice(index, 1);
+            afficherPanier();
+        }
+
+        // Valider la commande
+        async function validerCommande() {
+            if (panier.length === 0) {
+                alert('Panier vide');
+                return;
+            }
+
+            const fournisseur = document.getElementById('commandeFournisseur').value;
+            if (!fournisseur) {
+                alert('Veuillez sélectionner un fournisseur');
+                return;
+            }
+
+            try {
+                const total = panier.reduce((sum, item) => sum + (item.quantite * item.prixUnitaire), 0);
+
+                const commandeData = {
+                    pharmacyId: currentPharmacyId,
+                    fournisseur: fournisseur,
+                    items: panier,
+                    total: total,
+                    status: 'en_attente',
+                    createdBy: currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                await db.collection('commandes').add(commandeData);
+
+                alert('Commande validée avec succès!');
+                panier = [];
+                afficherPanier();
+                document.getElementById('commandeFournisseur').value = '';
+                await loadCommandes();
+                
+            } catch (error) {
+                alert('Erreur: ' + error.message);
+            }
+        }
+
+        // Exporter la commande
+        function exporterCommande() {
+            if (panier.length === 0) {
+                alert('Panier vide');
+                return;
+            }
+
+            const fournisseur = document.getElementById('commandeFournisseur').value || 'Non spécifié';
+            const date = new Date().toLocaleDateString('fr-FR');
+            
+            let csvContent = "Commande fournisseur\n";
+            csvContent += `Fournisseur: ${fournisseur}\n`;
+            csvContent += `Date: ${date}\n\n`;
+            csvContent += "Médicament,Quantité,Prix unitaire,Total\n";
+
+            panier.forEach(item => {
+                const total = item.quantite * item.prixUnitaire;
+                csvContent += `${item.nom},${item.quantite},${item.prixUnitaire},${total}\n`;
+            });
+
+            const total = panier.reduce((sum, item) => sum + (item.quantite * item.prixUnitaire), 0);
+            csvContent += `\nTotal général,,,${total}\n`;
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `commande_${fournisseur}_${date}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Charger les commandes
+        async function loadCommandes() {
+            if (!currentPharmacyId) return;
+
+            try {
+                const snapshot = await db.collection('commandes')
+                    .where('pharmacyId', '==', currentPharmacyId)
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
+                    .get();
+
+                commandesCache = [];
+                snapshot.forEach(doc => {
+                    commandesCache.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                displayCommandes();
+            } catch (error) {
+                console.error('Erreur chargement commandes:', error);
+            }
+        }
+
+        // Afficher les commandes
+        function displayCommandes() {
+            const commandesList = document.getElementById('commandesList');
+            commandesList.innerHTML = '';
+
+            if (commandesCache.length === 0) {
+                commandesList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-clock-history"></i>
+                        <p>Aucune commande</p>
+                    </div>
+                `;
+                return;
+            }
+
+            commandesCache.forEach(commande => {
+                const date = commande.createdAt ? new Date(commande.createdAt.toDate()).toLocaleDateString('fr-FR') : 'N/A';
+                const items = commande.items ? commande.items.length : 0;
+                
+                const statusClass = commande.status === 'livree' ? 'success' : 
+                                   commande.status === 'en_cours' ? 'warning' : 'secondary';
+
+                const card = document.createElement('div');
+                card.className = 'vendeur-card';
+                card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-2">Commande #${commande.id.slice(0, 8)}</h6>
+                            <p class="mb-1"><i class="bi bi-truck me-2"></i>${commande.fournisseur || 'Fournisseur inconnu'}</p>
+                            <p class="mb-1"><i class="bi bi-box me-2"></i>${items} article(s)</p>
+                            <p class="mb-0"><strong>Total: ${commande.total ? commande.total.toLocaleString() : 0} FCFA</strong></p>
+                        </div>
+                        <div>
+                            <span class="badge bg-${statusClass}">${commande.status || 'en_attente'}</span>
+                            <div class="small text-muted mt-2">${date}</div>
+                        </div>
+                    </div>
+                `;
+                commandesList.appendChild(card);
+            });
+        }
+
+        // Exporter le stock en CSV
+        function exportStockCSV() {
+            if (stockCache.length === 0) {
+                alert('Aucun stock à exporter');
+                return;
+            }
+
+            let csvContent = "Médicament,Description,Quantité,Prix,Date d'expiration,Fournisseur,Référence\n";
+
+            stockCache.forEach(item => {
+                csvContent += `"${item.nom || ''}","${item.description || ''}",${item.quantite || 0},${item.prix || 0},${item.expiration || ''},"${item.fournisseur || ''}","${item.code || ''}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `stock_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Exporter le stock en PDF (simulation)
+        function exportStockPDF() {
+            alert('Fonctionnalité d\'export PDF à implémenter');
+        }
+
+        // Mettre à jour le dashboard
+        function updateDashboard() {
+            if (!currentPharmacy) return;
+
+            document.getElementById('pharmacyNameDisplay').textContent = currentPharmacy.pharmacyName;
+            document.getElementById('adminNameDisplay').textContent = currentPharmacy.adminName;
+            document.getElementById('adminEmailDisplay').textContent = currentPharmacy.adminEmail;
+            
+            document.getElementById('infoPharmacyName').textContent = currentPharmacy.pharmacyName;
+            document.getElementById('infoAddress').textContent = currentPharmacy.pharmacyAddress;
+            document.getElementById('infoPhone').textContent = currentPharmacy.pharmacyPhone;
+            document.getElementById('infoEmail').textContent = currentPharmacy.adminEmail;
+            
+            document.getElementById('infoStartDate').textContent = formatDate(currentPharmacy.startDate);
+            document.getElementById('infoEndDate').textContent = formatDate(currentPharmacy.endDate);
+
+            const today = new Date();
+            const endDate = new Date(currentPharmacy.endDate);
+            const diffTime = endDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            document.getElementById('infoDaysLeft').textContent = diffDays > 0 ? diffDays + ' jours' : 'Expiré';
+
+            const paymentAlert = document.getElementById('paymentAlert');
+            const countdown = document.getElementById('countdown');
+            const paymentStatus = document.getElementById('paymentStatus');
+
+            if (diffDays <= 7) {
+                paymentAlert.style.display = 'block';
+                
+                if (diffDays <= 0) {
+                    countdown.className = 'countdown-timer timer-danger';
+                    countdown.textContent = 'EXPIRÉ';
+                    paymentStatus.innerHTML = '<i class="bi bi-exclamation-circle me-2"></i>Votre abonnement a expiré';
+                } else if (diffDays <= 3) {
+                    countdown.className = 'countdown-timer timer-danger';
+                    countdown.textContent = `${diffDays} jours`;
+                    paymentStatus.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>Expiration imminente!';
+                } else {
+                    countdown.className = 'countdown-timer timer-warning';
+                    countdown.textContent = `${diffDays} jours`;
+                    paymentStatus.innerHTML = '<i class="bi bi-clock me-2"></i>Abonnement expire bientôt';
+                }
+            } else {
+                paymentAlert.style.display = 'none';
+            }
+        }
+
+        // Mettre à jour les statistiques
+        function updateStats() {
+            document.getElementById('statsVendeurs').textContent = vendeursCache.length;
+            document.getElementById('statsMedicaments').textContent = stockCache.length;
+            
+            const stockFaible = stockCache.filter(item => item.quantite < 10).length;
+            document.getElementById('statsStockFaible').textContent = stockFaible;
+        }
+
+        // Changer le mot de passe
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                alert('Les mots de passe ne correspondent pas');
+                return;
+            }
+
+            try {
+                const user = auth.currentUser;
+                await user.updatePassword(newPassword);
+                alert('Mot de passe modifié avec succès!');
+                e.target.reset();
+            } catch (error) {
+                alert('Erreur: ' + error.message);
+            }
+        });
+
+        // Formater la date
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('fr-FR', options);
+        }
+
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            if (!user && document.getElementById('dashboard').style.display === 'block') {
+                logout();
+            }
+        });
+
+        // Mise à jour périodique
+        setInterval(() => {
+            if (currentPharmacy) {
+                updateDashboard();
+            }
+        }, 60000);
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Écouteur pour la recherche en temps réel
+            document.getElementById('searchStock')?.addEventListener('input', () => {
+                displayStock(stockCache);
+            });
+        });
+    </script>
+!-- Service Worker Registration -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker enregistré:', registration);
+                })
+                .catch(error => {
+                    console.log('Erreur ServiceWorker:', error);
+                });
+        });
+    }
+</script>
+
+</body>
+</html>
